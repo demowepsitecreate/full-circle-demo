@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Full Circle — Learn From Every Side</title>
+  <meta name="description" content="A school presentation demo website about learning from both success and failure." />
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1930;
+      --card:rgba(255,255,255,.07);
+      --card2:rgba(255,255,255,.10);
+      --text:#f5f7fb;
+      --muted:#aab7ca;
+      --line:rgba(255,255,255,.13);
+      --accent:#6ee7ff;
+      --accent2:#9b8cff;
+      --success:#61e294;
+      --warning:#ffbd69;
+      --shadow:0 24px 80px rgba(0,0,0,.35);
+      --radius:24px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(110,231,255,.13), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(155,140,255,.15), transparent 30%),
+        linear-gradient(135deg,var(--bg),var(--bg2));
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    body:before{
+      content:"";
+      position:fixed; inset:0; pointer-events:none; opacity:.18;
+      background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+      background-size:42px 42px;
+      mask-image:linear-gradient(to bottom,black,transparent 75%);
+    }
+    a{text-decoration:none;color:inherit}
+    .container{width:min(1120px,92%);margin:auto}
+    nav{
+      position:fixed; top:0; left:0; right:0; z-index:20;
+      background:rgba(7,17,31,.72); backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{height:72px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.5px}
+    .logo{
+      width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#06101d;font-weight:900;box-shadow:0 8px 25px rgba(110,231,255,.2)
+    }
+    .links{display:flex;gap:26px;color:var(--muted);font-size:.92rem}
+    .links a:hover{color:white}
+    .nav-btn{padding:10px 16px;border:1px solid var(--line);border-radius:999px;font-weight:700}
+    .hero{min-height:100vh;display:grid;place-items:center;padding:130px 0 80px;position:relative}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:55px;align-items:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;
+      background:rgba(110,231,255,.08);border:1px solid rgba(110,231,255,.2);
+      color:var(--accent);font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:1px
+    }
+    h1{font-size:clamp(3rem,7vw,6.2rem);line-height:.98;letter-spacing:-4px;margin:22px 0}
+    .gradient{background:linear-gradient(100deg,#fff,var(--accent),#c2baff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{font-size:1.15rem;color:var(--muted);max-width:650px}
+    .actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:30px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:14px;
+      border:1px solid var(--line);font-weight:800;cursor:pointer;transition:.25s
+    }
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07111f;border:0}
+    .btn.secondary{background:rgba(255,255,255,.05)}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(0,0,0,.25)}
+    .visual{
+      min-height:430px;position:relative;border:1px solid var(--line);border-radius:36px;
+      background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.025));
+      box-shadow:var(--shadow);overflow:hidden;padding:28px
+    }
+    .visual:after{
+      content:"";position:absolute;width:260px;height:260px;border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));filter:blur(65px);opacity:.23;
+      right:-70px;bottom:-80px
+    }
+    .path{position:absolute;left:13%;right:13%;top:49%;height:3px;background:linear-gradient(90deg,var(--warning),var(--accent));transform:rotate(-10deg)}
+    .node{position:absolute;width:112px;height:112px;border-radius:50%;display:grid;place-items:center;text-align:center;
+      font-weight:900;border:1px solid var(--line);background:rgba(7,17,31,.78);backdrop-filter:blur(8px);z-index:2}
+    .node small{display:block;color:var(--muted);font-weight:600;font-size:.68rem}
+    .node.fail{left:8%;top:36%;box-shadow:0 0 45px rgba(255,189,105,.16)}
+    .node.learn{left:43%;top:20%;box-shadow:0 0 45px rgba(110,231,255,.16)}
+    .node.success{right:7%;top:50%;box-shadow:0 0 45px rgba(97,226,148,.16)}
+    section{padding:95px 0}
+    .section-head{max-width:720px;margin-bottom:42px}
+    .kicker{color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:1.5px;font-size:.78rem}
+    h2{font-size:clamp(2rem,4vw,3.5rem);line-height:1.08;letter-spacing:-1.5px;margin:10px 0 15px}
+    .section-head p{color:var(--muted)}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:25px;
+      transition:.25s
+    }
+    .card:hover{transform:translateY(-6px);background:var(--card2)}
+    .icon{font-size:1.7rem;margin-bottom:18px}
+    .card h3{margin-bottom:8px}.card p{color:var(--muted);font-size:.94rem}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .perspective{padding:34px;border-radius:28px;border:1px solid var(--line);background:var(--card)}
+    .perspective.success{box-shadow:inset 0 1px 0 rgba(97,226,148,.15)}
+    .perspective.failure{box-shadow:inset 0 1px 0 rgba(255,189,105,.15)}
+    .tag{display:inline-block;padding:6px 10px;border-radius:999px;font-size:.75rem;font-weight:800;margin-bottom:15px}
+    .success .tag{background:rgba(97,226,148,.1);color:var(--success)}
+    .failure .tag{background:rgba(255,189,105,.1);color:var(--warning)}
+    .perspective ul{list-style:none;margin-top:18px;display:grid;gap:12px;color:var(--muted)}
+    .perspective li:before{content:"✓";color:var(--accent);font-weight:900;margin-right:10px}
+    .center-message{
+      margin:22px 0;text-align:center;padding:24px;border:1px dashed rgba(110,231,255,.3);
+      border-radius:20px;color:#dce8f7;background:rgba(110,231,255,.035);font-weight:700
+    }
+    .session{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
+    .session-main,.session-info{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:32px}
+    .session-main p{color:var(--muted);margin:12px 0 25px}
+    .timeline{display:grid;gap:14px}
+    .timeline div{display:flex;gap:15px;align-items:flex-start;padding:14px;border-radius:15px;background:rgba(255,255,255,.045)}
+    .time{min-width:80px;color:var(--accent);font-weight:800}
+    .info-list{display:grid;gap:12px;margin-top:18px}
+    .info-item{display:flex;justify-content:space-between;gap:15px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .info-item span:first-child{color:var(--muted)}
+    .register{
+      background:linear-gradient(135deg,rgba(110,231,255,.10),rgba(155,140,255,.10));
+      border:1px solid rgba(110,231,255,.22);border-radius:32px;padding:45px;
+      display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center
+    }
+    form{display:grid;gap:12px}
+    input,select,textarea{
+      width:100%;padding:14px 15px;border-radius:13px;border:1px solid var(--line);
+      background:rgba(3,10,20,.55);color:white;outline:none;font:inherit
+    }
+    textarea{min-height:90px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+    footer{padding:35px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.68);backdrop-filter:blur(8px);
+      display:none;place-items:center;z-index:50;padding:20px
+    }
+    .modal.show{display:grid}
+    .modal-box{width:min(460px,100%);background:#0b1930;border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow);text-align:center}
+    .check{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;margin:0 auto 15px;background:rgba(97,226,148,.12);color:var(--success);font-size:1.6rem}
+    .modal-box p{color:var(--muted);margin:10px 0 22px}
+    .close{width:100%}
+    @media(max-width:850px){
+      .links{display:none}
+      .hero-grid,.session,.register{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr}
+      .visual{min-height:350px}
+      h1{letter-spacing:-2px}
+    }
+    @media(max-width:560px){
+      .cards,.split{grid-template-columns:1fr}
+      section{padding:70px 0}
+      .register,.session-main,.session-info{padding:25px}
+      .node{width:88px;height:88px;font-size:.8rem}
+      .node small{font-size:.57rem}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <a href="#home" class="brand"><span class="logo">FC</span> FULL CIRCLE</a>
+      <div class="links">
+        <a href="#mission">Mission</a>
+        <a href="#perspectives">Perspectives</a>
+        <a href="#session">Session</a>
+        <a href="#register" class="nav-btn">Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Student Experience Initiative</span>
+          <h1>Learn from <span class="gradient">every side</span> of the journey.</h1>
+          <p>Success can show us what worked. Failure can show us what to avoid. Full Circle brings both perspectives into one learning experience so students can make better-informed decisions.</p>
+          <div class="actions">
+            <a class="btn primary" href="#register">Register for the Session →</a>
+            <a class="btn secondary" href="#perspectives">Explore the Idea</a>
+          </div>
+        </div>
+        <div class="visual" aria-label="Journey from failure to learning to success">
+          <div class="path"></div>
+          <div class="node fail">FAILURE<small>What went wrong?</small></div>
+          <div class="node learn">LEARNING<small>What changed?</small></div>
+          <div class="node success">SUCCESS<small>What worked?</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mission">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">Why connect with us?</span>
+          <h2>One journey. More than one lesson.</h2>
+          <p>We turn real experiences into practical learning by giving students access to the questions that are often left out of ordinary success stories.</p>
+        </div>
+        <div class="cards">
+          <article class="card"><div class="icon">🎯</div><h3>Real Experiences</h3><p>Hear what actually happened, not just a polished final result.</p></article>
+          <article class="card"><div class="icon">⚖️</div><h3>Two Perspectives</h3><p>Compare decisions, obstacles and lessons from different outcomes.</p></article>
+          <article class="card"><div class="icon">🧠</div><h3>Avoid Repeated Mistakes</h3><p>Understand common mistakes before you have to learn them the hard way.</p></article>
+          <article class="card"><div class="icon">🚀</div><h3>Make Better Decisions</h3><p>Use experience as information for your own next step.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="perspectives">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">The core idea</span>
+          <h2>Both sides matter.</h2>
+          <p>A complete learning experience should examine both outcomes instead of looking only at the finish line.</p>
+        </div>
+        <div class="split">
+          <article class="perspective success">
+            <span class="tag">SUCCESS PERSPECTIVE</span>
+            <h3>“What helped me move forward?”</h3>
+            <ul>
+              <li>Which decisions worked?</li>
+              <li>Which habits made a difference?</li>
+              <li>What should students repeat?</li>
+              <li>What would I recommend now?</li>
+            </ul>
+          </article>
+          <article class="perspective failure">
+            <span class="tag">FAILURE PERSPECTIVE</span>
+            <h3>“What should I have avoided?”</h3>
+            <ul>
+              <li>Where did things go wrong?</li>
+              <li>Which decisions created problems?</li>
+              <li>What should students avoid?</li>
+              <li>What did the experience teach me?</li>
+            </ul>
+          </article>
+        </div>
+        <div class="center-message">Complete knowledge comes from seeing the whole journey — not only the highlight reel.</div>
+      </div>
+    </section>
+
+    <section id="session">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">Demo session</span>
+          <h2>The Complete Journey</h2>
+          <p>Sample session details for this school presentation. The final event information can be updated later.</p>
+        </div>
+        <div class="session">
+          <div class="session-main">
+            <h3>A practical conversation about decisions, setbacks and progress.</h3>
+            <p>Students hear two different experiences, identify what can be learned from each, and finish with questions they can apply to their own goals.</p>
+            <div class="timeline">
+              <div><span class="time">10 min</span><span>Opening: Why one perspective is not enough</span></div>
+              <div><span class="time">20 min</span><span>Success story: decisions, habits and turning points</span></div>
+              <div><span class="time">20 min</span><span>Failure story: mistakes, setbacks and lessons</span></div>
+              <div><span class="time">15 min</span><span>Student Q&A and practical takeaways</span></div>
+            </div>
+          </div>
+          <aside class="session-info">
+            <h3>Session at a glance</h3>
+            <div class="info-list">
+              <div class="info-item"><span>Date</span><strong>To be announced</strong></div>
+              <div class="info-item"><span>Duration</span><strong>60–75 minutes</strong></div>
+              <div class="info-item"><span>Format</span><strong>Interactive</strong></div>
+              <div class="info-item"><span>Audience</span><strong>Students</strong></div>
+              <div class="info-item"><span>Venue</span><strong>School Auditorium</strong></div>
+              <div class="info-item"><span>Status</span><strong>Demo Event</strong></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="register">
+      <div class="container">
+        <div class="register">
+          <div>
+            <span class="kicker">Join the experience</span>
+            <h2>Be part of the conversation.</h2>
+            <p style="color:var(--muted);margin-top:12px">Register for the demo session. This form is for presentation purposes and does not submit data to a real server.</p>
+          </div>
+          <form id="registrationForm">
+            <input id="name" required placeholder="Full Name" />
+            <select id="class" required>
+              <option value="">Select Class</option>
+              <option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option>
+            </select>
+            <input id="school" required placeholder="School Name" />
+            <input id="contact" placeholder="Email / Phone (demo)" />
+            <textarea id="reason" placeholder="What would you like to learn?"></textarea>
+            <button class="btn primary" type="submit">Complete Registration →</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© 2026 Full Circle — School Presentation Demo</span>
+      <span>Learn the success. Understand the setback. Choose your next step.</span>
+    </div>
+  </footer>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <div class="check">✓</div>
+      <h2>Registration received!</h2>
+      <p>This is a demonstration form for the presentation. No information has been sent to a real server.</p>
+      <button class="btn primary close" onclick="closeModal()">Back to Website</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("registrationForm");
+    const modal = document.getElementById("modal");
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      modal.classList.add("show");
+    });
+
+    function closeModal(){
+      modal.classList.remove("show");
+      form.reset();
+    }
+
+    modal.addEventListener("click", function(e){
+      if(e.target === modal) closeModal();
+    });
+  </script>
+</body>
+</html>
